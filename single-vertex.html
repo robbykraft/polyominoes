@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<title>single vertex</title>
+<script type="text/javascript" src="https://robbykraft.github.io/Math/math.js"></script>
+
+<script>
+
+// possible ps:
+// -180, -90, 0, 90, 180
+const fold_angles = [-Math.PI, -Math.PI/2, 0, Math.PI/2, Math.PI];
+
+// the dihedral fold angle.
+const p_matrices = fold_angles
+	.map(angle => math.matrix().rotateX(angle));
+const p_matrices_dictionary = {
+	a: p_matrices[0],
+	b: p_matrices[1],
+	c: p_matrices[2],
+	d: p_matrices[3],
+	e: p_matrices[4],
+}
+// rotate 1/8 45deg crease lines into place along the X axis
+const a_matrices = Array.from(Array(8))
+	.map((_, i) => i/8*Math.PI*2)
+	.map(angle => math.matrix().rotateZ(angle));
+
+// make a special case. all flat.
+const blankEntry = () => Array
+	.from(Array(8))
+	.map((_, i) => ({a: i * Math.PI/4, p: 0}))
+
+const recurse = (string, permutations = []) => {
+	if (string.length >= 8) {
+		permutations.push(string);
+		return permutations;
+	}
+	return recurse(string + "a")
+		.concat(recurse(string + "b"))
+		.concat(recurse(string + "c"))
+		.concat(recurse(string + "d"))
+		.concat(recurse(string + "e"));
+}
+
+const permutations = recurse("");
+
+// console.log(p_matrices);
+// console.log(a_matrices);
+// console.log(permutations);
+// make a smaller set for now
+permutations.splice(100000);
+// permutations.unshift("dcdcdcea");
+// console.log(permutations);
+
+const creasePatterns = permutations.map(string => {
+	return Array.from(string).map((el, i) => ({
+		A: a_matrices[i],
+		C: p_matrices_dictionary[el],
+	}))
+});
+
+// todo: check that the order of multiplication is correct
+creasePatterns.forEach(singleVert => {
+	singleVert.forEach(fold => {
+		fold.x = fold.A.inverse().multiply(fold.C).multiply(fold.A);
+	})
+});
+
+creasePatterns.forEach(singleVert => {
+	singleVert.forEach((fold, i) => {
+		let mat = math.matrix();
+		for (let j = 0; j < i; j++) {
+			// multiply inverse matrices
+			mat = mat.multiply(singleVert[j].x.inverse())
+		}
+		// multiply
+		mat = mat.multiply(singleVert[i].x);
+		for (let j = i - 1; j >= 0; j--) {
+			// multiply
+			mat = mat.multiply(singleVert[j].x);
+		}
+		singleVert[i].L = mat;
+	});
+	let mat = math.matrix();
+	for (let i = 0; i < singleVert.length; i++) {
+		mat = mat.multiply(singleVert[i].L);
+	}
+	singleVert.mat = mat;
+});
+
+console.log(creasePatterns);
+
+</script>
