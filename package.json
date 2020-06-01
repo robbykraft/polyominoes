@@ -1,0 +1,24 @@
+{
+  "name": "code",
+  "version": "1.0.0",
+  "description": "",
+  "main": "math.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "run": "node single-vertex.js",
+    "start": "node single-vertex.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/robbykraft/polyominoes.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/robbykraft/polyominoes/issues"
+  },
+  "homepage": "https://github.com/robbykraft/polyominoes#readme",
+  "dependencies": {
+    "rabbit-ear-svg": "^0.2.0"
+  }
+}
