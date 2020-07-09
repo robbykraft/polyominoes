@@ -67,7 +67,7 @@ fs.writeFileSync(`${outputDir}/permutations.txt`, permString);
 //  CLIP DATA
 //  to speed up program. smaller data set.
 
-permutations.splice(1000);
+// permutations.splice(1000);
 // permutations.unshift("dcdcdcea");
 // permutations.unshift("cccccccc");
 // console.log(permutations);
@@ -216,11 +216,18 @@ const creaseCoords = [
 ];
 
 const foldAngleStrokes = {
-	a: "#00ff",
-	b: "#00f8",
-	c: "#fff0",
-	d: "#f008",
-	e: "#f00f",
+	a: "#00f", // "#00ff",
+	b: "#00f", // "#00f8",
+	c: "#fff", // "#fff0",
+	d: "#f00", // "#f008",
+	e: "#f00", // "#f00f",
+};
+const foldAngleOpacities = {
+	a: "1.0",
+	b: "0.5",
+	c: "1.0",
+	d: "0.5",
+	e: "1.0",
 };
 
 const drawPermutation = (perm) => {
@@ -228,7 +235,8 @@ const drawPermutation = (perm) => {
 	Array.from(perm).map((letter, i) => {
 		if (letter !== "c") {
 			svg.line(...creaseCoords[i])
-				.stroke(foldAngleStrokes[letter]);
+				.stroke(foldAngleStrokes[letter])
+				.opacity(foldAngleOpacities[letter]);
 		}
 	});
 	svg.rect(-SIZE, -SIZE, SIZE*2, SIZE*2)
