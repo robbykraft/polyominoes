@@ -10,11 +10,8 @@ const {
 	make_matrix3_rotateZ,
 	is_identity3x4,
 } = require("./matrix");
-const Timestamp = require("./timestamp");
-const timestamp = Timestamp();
+const timestamp = require("./timestamp")();
 timestamp.begin();
-
-const timeStart = process.hrtime();
 
 const outputDir = "./output";
 fs.existsSync(outputDir) || fs.mkdirSync(outputDir);
@@ -141,21 +138,21 @@ const printMatrix = (mat) => `[ ${(mat[0]).toFixed(3)} ${(mat[3]).toFixed(3)} ${
 /////////////////////////////////////
 // write files
 //
-const permString_valid = permutations
-	.filter((_, i) => cpIsValid[i])
-	.join("\n");
-fs.writeFileSync(`${outputDir}/permutations_valid.txt`, permString_valid);
+// const permString_valid = permutations
+// 	.filter((_, i) => cpIsValid[i])
+// 	.join("\n");
+// fs.writeFileSync(`${outputDir}/permutations_valid.txt`, permString_valid);
 
 const text_matrices = cpMatrices
 	// .map(el => el.mat.slice(0, 9).join(" ")) // one-line
 	.map(el => printMatrix(el))  // expanded view
 	.join("\n");
-fs.writeFileSync(`${outputDir}/matrices.txt`, text_matrices);
+fs.writeFileSync(`${outputDir}/log-matrices.txt`, text_matrices);
 
-const text_isIdentity = cpIsValid
-	.map((iden, i) => iden ? `${i}: true` : `${i}:`)
-	.join("\n");
-fs.writeFileSync(`${outputDir}/isIdentity.txt`, text_isIdentity);
+// const text_isIdentity = cpIsValid
+// 	.map((iden, i) => iden ? `${i}: true` : `${i}:`)
+// 	.join("\n");
+// fs.writeFileSync(`${outputDir}/isIdentity.txt`, text_isIdentity);
 
 const validIndicesString = permutations
 	.map((_, i) => cpIsValid[i] ? i : undefined)

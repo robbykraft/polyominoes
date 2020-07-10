@@ -54,12 +54,13 @@ const sectorAngles = cycled.map(str => {
 });
 
 // are both creases mountain or valley (including 90deg m/v)
+// at least one must be 180
 // flat creases return false
 const similarAssignment = (a, b) => {
 	const aAngle = degrees[a];
 	const bAngle = degrees[b];
-	if (aAngle < 0 && bAngle < 0) { return true; }
-	if (aAngle > 0 && bAngle > 0) { return true; }
+	if (aAngle + bAngle < -181) { return true; }
+	if (aAngle + bAngle > 181) { return true; }
 	return false;
 }
 
