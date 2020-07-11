@@ -2,6 +2,8 @@
 const fs = require("fs");
 const outputDir = "./output";
 fs.existsSync(outputDir) || fs.mkdirSync(outputDir);
+const timestamp = require("./timestamp")();
+timestamp.begin();
 
 const stringified = fs.readFileSync("output/sectors.json", "utf-8");
 const permutationsSectors = JSON.parse(stringified);
@@ -19,6 +21,9 @@ const flatAndSimilar = (a, b) => {
 const selfIntersectionTest = permutationsSectors
 	.map(cp => cp.sectors
 		.map((angle, i) => {
+			// fencepost:
+			// 3 sectors: cp.sectors[prevI], angle, cp.sectors[nextI]
+			// 2 creases: cp.creases[i], cp.creases[nextI]
 			const prevI = (i + cp.sectors.length - 1) % cp.sectors.length;
 			const nextI = (i + 1) % cp.sectors.length;
 			if (flatAndSimilar(cp.creases[i], cp.creases[nextI])) {
@@ -53,3 +58,5 @@ fs.writeFileSync(outputDir + "/log-sector-flat-test.txt", outputSectorTest);
 
 const outputSectorFails = failIndices.join("\n");
 fs.writeFileSync(outputDir + "/log-sector-flat-fails.txt", outputSectorFails);
+const endTime = timestamp.end("remove flat sectors that self-intersect");
+console.log(`finished in ${endTime[0]} seconds`);

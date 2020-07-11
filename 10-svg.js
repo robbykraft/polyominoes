@@ -1,3 +1,6 @@
+// whenever you are ready, build the SVGs using the list of
+// indices contained in "output/valid.txt"
+
 const fs = require("fs");
 const SVG = require("rabbit-ear-svg");
 const timestamp = require("./timestamp")();

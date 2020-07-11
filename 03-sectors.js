@@ -4,6 +4,8 @@
 const fs = require("fs");
 const outputDir = "./output";
 fs.existsSync(outputDir) || fs.mkdirSync(outputDir);
+const timestamp = require("./timestamp")();
+timestamp.begin();
 
 const permutations = fs
 	.readFileSync("output/permutations.txt", "utf-8")
@@ -64,5 +66,6 @@ const sectorAngles = cycled.map(str => {
 
 const sectors = sectorCreases
 	.map((creases, i) => ({ creases, sectors: sectorAngles[i] }))
-
 fs.writeFileSync(outputDir + "/sectors.json", JSON.stringify(sectors, null, " "));
+const endTime = timestamp.end("converted permutations to sector-angle form");
+console.log(`finished in ${endTime[0]} seconds`);
