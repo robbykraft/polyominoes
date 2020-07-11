@@ -66,3 +66,6 @@ permutations.forEach((perm, i) => {
 	const svg = drawPermutation(perm);
 	fs.writeFileSync(`${svgDir}/${valid[i]}.svg`, svg);
 });
+
+const endTime = timestamp.end(`wrote ${permutations.length} svgs`);
+console.log(`finished in ${endTime[0]} seconds`);

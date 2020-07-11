@@ -1,5 +1,4 @@
 const fs = require("fs")
-const SVG = require("rabbit-ear-svg");
 const {
 	Matrix,
 	multiply_matrices3,

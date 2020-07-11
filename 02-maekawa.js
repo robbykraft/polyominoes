@@ -12,73 +12,57 @@ const degrees = {
 	e: 180,
 };
 
-const valid = fs
-	.readFileSync("output/valid.txt", "utf-8")
-	.split("\n");
-const validMap = {};
-valid.forEach(i => { validMap[i] = true; });
-
+// permutations is the array of indices. minus the invalid ones.
 const permutations = fs
 	.readFileSync("output/permutations.txt", "utf-8")
 	.split("\n")
-	.filter((_, i) => validMap[i]);
-
-
-// const permutations = fs
-// 	.readFileSync("output/permutations_valid.txt", "utf-8")
-// 	.split("\n");
-
-// const valid = fs
-// 	.readFileSync("output/isIdentity.txt", "utf-8")
-// 	.split("\n")
-// 	.map((e, i) => e.includes("true") ? i : null)
-// 	.filter(a => a !== null);
+	// .filter((_, i) => validMap[i]);
 
 const flatFoldsOnly = permutations
 	.map(str => !str.includes("b") && !str.includes("d"));
 
 const flatIndices = [];
 
-// let outputFlatFoldsOnly = "";
-const flatFoldable = flatFoldsOnly.map((ff, i) => ({ff, i}))
+// array of indices
+const flatFoldable = flatFoldsOnly
+	.map((ff, i) => ({ff, i}))
 	.filter(el => el.ff)
-	.map(el => valid[el.i]);
-const outputFlatFoldsOnly = flatFoldable.join("\n");
-// flatFoldsOnly.forEach((ff, i) => {
-// 	if (ff) { flatIndices.push(i); }
-// 	outputFlatFoldsOnly += `${valid[i]}:${(ff ? " true" : "")}\n`
-// });
+	.map(el => el.i);
 
-const maekawaTest = flatIndices
+// index-matches with flatFoldable
+const maekawaTest = flatFoldable
 	.map((i) => permutations[i].split("")
 		.map(l => degrees[l])
 		.reduce((a, b) => a + b, 0));
 
 let outputMaekawaSum = "";
 maekawaTest.forEach((sum, i) => {
-	outputMaekawaSum += `${valid[flatIndices[i]]}: ${(sum)}\n`
+	outputMaekawaSum += `${flatFoldable[i]}: ${(sum)}\n`
 });
 
 const maekawaPassedTest = maekawaTest
 	.map(sum => sum === 360 || sum === -360);
 
-let outputMaekawaPassed = "";
-maekawaPassedTest.forEach((pass, i) => {
-	outputMaekawaPassed += `${valid[flatIndices[i]]}:${(pass ? "" : " fail")}\n`
-});
+// the final list of failures. indices. cps that fail Maekawa's theorem
+const failIndices = maekawaPassedTest
+	.map((pass, i) => (pass ? undefined : flatFoldable[i]))
+	.filter(a => a !== undefined);
 
+// update valid list, remove invalid Maekawa flat foldable CPs
+const valid = fs
+	.readFileSync("output/valid.txt", "utf-8")
+	.split("\n");
+const validMap = {};
+valid.forEach(i => { validMap[i] = true; });
+failIndices.forEach(i => { delete validMap[i]; })
+const newValid = Object.keys(validMap);
+fs.writeFileSync(outputDir + "/valid.txt", newValid.join("\n"));
+
+// write logs
+const outputFlatFoldsOnly = flatFoldable.join("\n");
 fs.writeFileSync(outputDir + "/log-flat-foldable.txt", outputFlatFoldsOnly);
+const outputFailIndices = failIndices.join("\n");
+fs.writeFileSync(outputDir + "/log-Maekawa-fails.txt", outputFailIndices);
 fs.writeFileSync(outputDir + "/log-flatFoldsMaekawaSums.txt", outputMaekawaSum);
-fs.writeFileSync(outputDir + "/log-flatFoldsMaekawaPass.txt", outputMaekawaPassed);
-// fs.writeFileSync(outputDir + "/windings_valid.txt", outputValid);
-
-// remove svgs from folder that aren't valid
-// maekawaPassedTest.forEach((pass, i) => {
-// 	if (!pass) {
-// 		fs.unlinkSync(`${outputDir}/svgs/${valid[flatIndices[i]]}.svg`);
-// 	}
-// });
-
-// console.log(windings.length, permutations.length);
-
-timestamp.end("maekawa's theorem applied to flat-foldable");
+const endTime = timestamp.end("maekawa's theorem applied to flat-foldable");
+console.log(`finished in ${endTime[0]} seconds`);
