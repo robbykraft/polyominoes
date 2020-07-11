@@ -59,4 +59,4 @@ fs.writeFileSync(outputDir + "/log-sector-flat-test.txt", outputSectorTest);
 const outputSectorFails = failIndices.join("\n");
 fs.writeFileSync(outputDir + "/log-sector-flat-fails.txt", outputSectorFails);
 const endTime = timestamp.end("remove flat sectors that self-intersect");
-console.log(`finished in ${endTime[0]} seconds`);
+console.log(`finished in ${endTime[0]}.${endTime[1]} seconds`);

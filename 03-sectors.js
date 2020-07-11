@@ -68,4 +68,4 @@ const sectors = sectorCreases
 	.map((creases, i) => ({ creases, sectors: sectorAngles[i] }))
 fs.writeFileSync(outputDir + "/sectors.json", JSON.stringify(sectors, null, " "));
 const endTime = timestamp.end("converted permutations to sector-angle form");
-console.log(`finished in ${endTime[0]} seconds`);
+console.log(`finished in ${endTime[0]}.${endTime[1]} seconds`);

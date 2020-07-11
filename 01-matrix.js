@@ -154,4 +154,4 @@ fs.writeFileSync(`${outputDir}/valid.txt`, validIndicesString);
 
 const cpReport = `${cpIsValid.reduce((a,b) => a+(b?1:0),0)} / ${permutations.length} valid cases`;
 const endTime = timestamp.end(cpReport);
-console.log(`finished in ${endTime[0]} seconds`);
+console.log(`finished in ${endTime[0]}.${endTime[1]} seconds`);

@@ -67,4 +67,4 @@ const outputMaekawaSum = maekawaSums
 	.join("\n");
 fs.writeFileSync(outputDir + "/log-flatFoldsMaekawaSums.txt", outputMaekawaSum);
 const endTime = timestamp.end("maekawa's theorem applied to flat-foldable");
-console.log(`finished in ${endTime[0]} seconds`);
+console.log(`finished in ${endTime[0]}.${endTime[1]} seconds`);

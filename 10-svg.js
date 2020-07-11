@@ -71,4 +71,4 @@ validPermutations.forEach((perm, i) => {
 });
 
 const endTime = timestamp.end(`wrote ${validPermutations.length} svgs`);
-console.log(`finished in ${endTime[0]} seconds`);
+console.log(`finished in ${endTime[0]}.${endTime[1]} seconds`);

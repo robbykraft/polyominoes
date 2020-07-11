@@ -8,14 +8,6 @@ timestamp.begin();
 const stringified = fs.readFileSync("output/sectors.json", "utf-8");
 const permutationsSectors = JSON.parse(stringified);
 
-const degrees = {
-	a: -180,
-	b: -90,
-	c: 0,
-	d: 90,
-	e: 180,
-};
-
 // this is one half of the intersection test
 // if a sector on one side is flat (a), and the other side (b) is
 // the same assignment, either 90 or 180, return true
@@ -75,4 +67,4 @@ fs.writeFileSync(outputDir + "/log-sector-intersection-test.txt", outputSectorTe
 const outputSectorFails = failIndices.join("\n");
 fs.writeFileSync(outputDir + "/log-sector-intersection-fails.txt", outputSectorFails);
 const endTime = timestamp.end("remove sectors that self-intersect");
-console.log(`finished in ${endTime[0]} seconds`);
+console.log(`finished in ${endTime[0]}.${endTime[1]} seconds`);
