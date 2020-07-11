@@ -1,3 +1,4 @@
+// 390,625 to 8,921
 const fs = require("fs")
 const {
 	Matrix,
@@ -96,19 +97,6 @@ const crease_matrices_inv = crease_matrices.map(mats => ({
 	e: invert_matrix3(mats["e"]),
 }));
 
-const fold_angles_description = {
-	a: "-180°",
-	b: "-90°",
-	c: "0°",
-	d: "90°",
-	e: "180°",
-};
-
-const creaseMatrixString = crease_matrices
-	.map((el, i) => `crease ${45*i}°\n\n` + ["a","b","c","d","e"]
-		.map(key => `${fold_angles_description[key]}: ${el[key].slice(0, 9).join(" ")}`).join("\n")).join("\n\n"); 
-fs.writeFileSync(`${outputDir}/log-crease-matrices.txt`, creaseMatrixString);
-
 const cpMatrices = permutations.map(string => {
 	const Ls = Array.from(string).map((char, i) => {
 		// create a matrix that is the product of:
@@ -134,13 +122,18 @@ const cpIsValid = cpMatrices.map(el => is_identity3x4(el));
 
 const printMatrix = (mat) => `[ ${(mat[0]).toFixed(3)} ${(mat[3]).toFixed(3)} ${(mat[6]).toFixed(3)} ]\n[ ${(mat[1]).toFixed(3)} ${(mat[4]).toFixed(3)} ${(mat[7]).toFixed(3)} ]\n[ ${(mat[2]).toFixed(3)} ${(mat[5]).toFixed(3)} ${(mat[8]).toFixed(3)} ]\n`;
 
-/////////////////////////////////////
-// write files
-//
-// const permString_valid = permutations
-// 	.filter((_, i) => cpIsValid[i])
-// 	.join("\n");
-// fs.writeFileSync(`${outputDir}/permutations_valid.txt`, permString_valid);
+// write logs
+const fold_angles_description = {
+	a: "-180°",
+	b: "-90°",
+	c: "0°",
+	d: "90°",
+	e: "180°",
+};
+const creaseMatrixString = crease_matrices
+	.map((el, i) => `crease ${45*i}°\n\n` + ["a","b","c","d","e"]
+		.map(key => `${fold_angles_description[key]}: ${el[key].slice(0, 9).map(n => n.toFixed(3)).join(" ")}`).join("\n")).join("\n\n"); 
+fs.writeFileSync(`${outputDir}/log-crease-matrices.txt`, creaseMatrixString);
 
 const text_matrices = cpMatrices
 	// .map(el => el.mat.slice(0, 9).join(" ")) // one-line

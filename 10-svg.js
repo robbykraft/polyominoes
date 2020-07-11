@@ -57,15 +57,15 @@ const valid = fs
 const validMap = {};
 valid.forEach(i => { validMap[i] = true; });
 
-const permutations = fs
+const validPermutations = fs
 	.readFileSync("output/permutations.txt", "utf-8")
 	.split("\n")
 	.filter((_, i) => validMap[i]);
 
-permutations.forEach((perm, i) => {
+validPermutations.forEach((perm, i) => {
 	const svg = drawPermutation(perm);
 	fs.writeFileSync(`${svgDir}/${valid[i]}.svg`, svg);
 });
 
-const endTime = timestamp.end(`wrote ${permutations.length} svgs`);
+const endTime = timestamp.end(`wrote ${validPermutations.length} svgs`);
 console.log(`finished in ${endTime[0]} seconds`);
