@@ -53,12 +53,20 @@ const drawPermutation = (perm) => {
 
 const svgDir = outputDir + "/svgs";
 fs.existsSync(svgDir) || fs.mkdirSync(svgDir);
+fs.existsSync(svgDir + "/3D") || fs.mkdirSync(svgDir + "/3D");
+fs.existsSync(svgDir + "/flat") || fs.mkdirSync(svgDir + "/flat");
 
 const valid = fs
 	.readFileSync("output/valid.txt", "utf-8")
 	.split("\n");
 const validMap = {};
 valid.forEach(i => { validMap[i] = true; });
+
+const flat = fs
+	.readFileSync("output/flat-foldable.txt", "utf-8")
+	.split("\n");
+const flatMap = {};
+flat.forEach(i => { flatMap[i] = true; });
 
 const validPermutations = fs
 	.readFileSync("output/permutations.txt", "utf-8")
@@ -67,7 +75,10 @@ const validPermutations = fs
 
 validPermutations.forEach((perm, i) => {
 	const svg = drawPermutation(perm);
-	fs.writeFileSync(`${svgDir}/${valid[i]}.svg`, svg);
+	const dir = flatMap[valid[i]] === true
+		? `${svgDir}/flat`
+		: `${svgDir}/3D`;
+	fs.writeFileSync(`${dir}/${valid[i]}.svg`, svg);
 });
 
 const endTime = timestamp.end(`wrote ${validPermutations.length} svgs`);

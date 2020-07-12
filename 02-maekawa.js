@@ -59,7 +59,7 @@ fs.writeFileSync(outputDir + "/valid.txt", newValid.join("\n"));
 
 // write logs
 const outputFlatFoldsOnly = flatFoldable.join("\n");
-fs.writeFileSync(outputDir + "/log-flat-foldable.txt", outputFlatFoldsOnly);
+fs.writeFileSync(outputDir + "/flat-foldable.txt", outputFlatFoldsOnly);
 const outputFailIndices = failIndices.join("\n");
 fs.writeFileSync(outputDir + "/log-Maekawa-fails.txt", outputFailIndices);
 const outputMaekawaSum = maekawaSums
